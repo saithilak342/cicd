@@ -17,8 +17,7 @@
 		<app.runtime>4.2.2</app.runtime>
 		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
 	</properties>
-
-	<build>
+<build>
 		<plugins>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
@@ -26,8 +25,61 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+                    <copyToAppsDirectory>true</copyToAppsDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+               <execution>
+                  <phase>initialize</phase>
+                  <goals>
+                     <goal>read-project-properties</goal>
+                  </goals>
+                  <configuration>
+                     <files>
+                        <file>src/main/resources/jenkins.properties</file>
+                     </files>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <!-- Deploy to Cloudhub -->
+         <plugin>
+            <groupId>org.mule.tools.maven</groupId>
+            <artifactId>mule-maven-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+		        <cloudHubDeployment>
+		            <uri>https://anypoint.mulesoft.com</uri>
+		            <muleVersion>${mule.version}</muleVersion>
+		            <username>happiest</username>
+		            <password>Saithilak@123</password>
+		            <applicationName>firstdemo</applicationName>
+		            <environment>Sandbox</environment>
+					<workerType>Micro</workerType>
+					<workers>1</workers>
+		        </cloudHubDeployment>
+		    </configuration>
+           	<executions>
+               <execution>
+                  <id>deploy</id>
+                  <phase>deploy</phase>
+                  <goals>
+                     <goal>deploy</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+               <skip>true</skip>
+            </configuration>
+         </plugin>
 		</plugins>
 	</build>
 
